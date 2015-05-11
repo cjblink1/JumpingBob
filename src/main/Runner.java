@@ -15,12 +15,16 @@ public class Runner {
         System.out.println("Running");
 
         JFrame game = new JFrame("JumpingBob");
+
+
         game.setContentPane(new GamePanel());
+        game.setResizable(false);
         game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         game.pack();
         game.setVisible(true);
 
-        System.out.println("Main method finished... moving to GamePanel...");
+
+
 
 
 
