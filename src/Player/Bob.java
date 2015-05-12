@@ -3,8 +3,6 @@ package Player;
 import Game.Barrier;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 /**
@@ -18,17 +16,13 @@ public class Bob {
     private int height;
     private double vx;
     private double vy;
-    private double gravity = .15;
-    private double friction = .1;
-    private double heightCount = 0;
+    private final double GRAVITY = .15;
+    private final double FRICTION = .06;
     private int jetPackCount = 4;
 
     public boolean falling;
     public boolean jumping;
-    public boolean topCollision;
     public boolean bottomCollision;
-    public boolean leftCollision;
-    public boolean rightCollision;
 
     public Bob(int x, int y)
     {
@@ -50,11 +44,11 @@ public class Bob {
     public void update (ArrayList<Barrier> barriers)
     {
 
-        vy += gravity;
+        vy += GRAVITY;
 
         if (Math.abs(vx) > 0) {
-            if (vx > 0) vx -= friction;
-            if (vx < 0) vx += friction;
+            if (vx > 0) vx -= FRICTION;
+            if (vx < 0) vx += FRICTION;
         }
         if (!falling && Math.abs(vy) < 0.2) {
             jumping = false;
@@ -91,20 +85,6 @@ public class Bob {
                     jetPackCount = 5;
                 }
 
-                if(!jumping && b.getHypotheticalRectangle().intersectsLine(x+vx, y+vy, x+width+vx, y+vy));
-                {
-                    topCollision = true;
-                    //y = b.getY() + b.getHeight();
-
-
-                }
-
-
-
-
-
-
-
 
 
                 return;
@@ -127,7 +107,6 @@ public class Bob {
         return new Rectangle((int)(this.x+vx),(int)(this.y+vy), this.width, this.height);
     }
 
-    public boolean isJumping(){return jumping;}
 
     public void setVY(double vy){this.vy = vy;}
     public void setVX(double vx){this.vx = vx;}

@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import  java.util.Random;
+import java.util.Random;
 
 public class GamePanel extends JPanel implements Runnable, KeyListener
 {
@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 
     public GamePanel()
     {
-        setPreferredSize(new Dimension(640, 480));
+        setPreferredSize(new Dimension((int)(640*1.5), (int)(480*1.5)));
         setFocusable(true);
         requestFocusInWindow();
         setVisible(true);
@@ -110,14 +110,23 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 
         for (Barrier b: barriers)
         {
-
             b.draw(g);
         }
+
         g.setFont(new Font("Helvetica",Font.ITALIC,40));
         g.drawString("Level:" + String.valueOf(heightCount+1), 450, 40);
         g.drawString("JetPack:" + String.valueOf(bob.getJetPackCount()), 450, 80);
 
         bob.draw(g);
+
+        if(bob.getY() > 480 && bob.getJetPackCount() == 0)
+        {
+            g.setColor(new Color(50,50,50,212));
+            g.fillRect(0, 0, 640, 480);
+            g.setColor(Color.RED);
+            g.drawString("GAME OVER", 200, 240);
+
+        }
 
 
 //        g.drawString("Jumping :"+String.valueOf(bob.jumping),500,20);
@@ -180,7 +189,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
     }
 
     private void drawToScreen (){
-        this.getGraphics().drawImage(image, 0,0, null);
+        this.getGraphics().drawImage(image, 0,0,(int)(640*1.5),(int)(480*1.5), null);
 
     }
 
@@ -201,12 +210,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 
         if (e.getKeyCode() == KeyEvent.VK_LEFT)
         {
-            bob.setVX(-5);
+            bob.setVX(-4);
         }
 
         if (e.getKeyCode() == KeyEvent.VK_RIGHT)
         {
-            bob.setVX(5);
+            bob.setVX(4);
         }
     }
 
