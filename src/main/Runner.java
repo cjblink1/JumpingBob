@@ -3,8 +3,6 @@ package main;
 import javax.swing.*;
 import Game.GamePanel;
 
-import java.awt.*;
-
 /**
  * Created by Connor on 5/10/15.
  */
