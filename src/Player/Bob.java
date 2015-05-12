@@ -2,7 +2,10 @@ package Player;
 
 import Game.Barrier;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -19,6 +22,7 @@ public class Bob {
     private final double GRAVITY = .15;
     private final double FRICTION = .06;
     private int jetPackCount = 4;
+    private BufferedImage image;
 
     public boolean falling;
     public boolean jumping;
@@ -38,6 +42,12 @@ public class Bob {
         this.jumping = false;
         this.falling = true;
 
+        try {
+            image = ImageIO.read(new File("res/bob2.png"));
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
 
     }
 
@@ -98,8 +108,10 @@ public class Bob {
 
     public void draw(Graphics g)
     {
-        g.setColor(Color.red);
-        g.fillRect((int)x,(int)y,width,height);
+//        g.setColor(Color.red);
+//        g.fillRect((int)x,(int)y,width,height);
+
+        g.drawImage(image, (int)x, (int)y, width, height, null);
     }
 
     public Rectangle getHypotheticalRectangle()

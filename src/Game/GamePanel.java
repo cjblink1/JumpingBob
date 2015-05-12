@@ -2,10 +2,12 @@ package Game;
 
 import Player.Bob;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,12 +19,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
     private final int FPS = 30;
     private int heightCount = 0;
     private Thread thread;
+    private BufferedImage background;
 
     private boolean running;
 
     private ArrayList<Barrier> barriers;
     private Bob bob;
     private Random randy;
+    private BackgroundMusic bgm;
+    private long musicStart;
 
     public GamePanel()
     {
@@ -30,6 +35,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
         setFocusable(true);
         requestFocusInWindow();
         setVisible(true);
+
+        try {
+            background = ImageIO.read(new File("res/clouds.jpg"));
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
 
 
     }
@@ -56,13 +68,19 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
         randy = new Random();
 
 
-        barriers = new ArrayList<Barrier>();
+        barriers = new ArrayList<>();
         barriers.add(new Barrier(randy.nextInt(500),100,100,20));
         barriers.add(new Barrier(randy.nextInt(500),200,100,20));
         barriers.add(new Barrier(randy.nextInt(500),300,100,20));
         barriers.add(new Barrier(0,400,640,80));
 
         bob = new Bob(20,20);
+
+
+
+        bgm = new BackgroundMusic("res/jumpingBob.mp3");
+        bgm.start();
+        musicStart = System.currentTimeMillis();
 
 
 
@@ -80,6 +98,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
             update();
             draw();
             drawToScreen();
+
+            long musicElapsed = System.currentTimeMillis() - musicStart;
+
+            if(musicElapsed/221000 > 0 && musicElapsed%221000 < 1000)
+            {
+                bgm.start();
+                musicStart = System.currentTimeMillis();
+            }
 
             long elapsed = System.currentTimeMillis() - start;
 
@@ -104,7 +130,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 
     private void draw() {
 
-        g.setColor(Color.cyan);
+
+
+
+        g.drawImage(background, 0, 0, null);
+        if(heightCount <= 22)g.setColor(new Color(255, 255, 255, 220-heightCount*10));
+        if (heightCount > 22 && heightCount <= 37)g.setColor(new Color(0, 0, 0, (heightCount-11)*10));
+        if (heightCount > 37)g.setColor(new Color(0,0,0,255));
         g.fillRect(0, 0, 640, 480);
 
 
@@ -114,6 +146,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
         }
 
         g.setFont(new Font("Helvetica",Font.ITALIC,40));
+        g.setColor(Color.WHITE);
         g.drawString("Level:" + String.valueOf(heightCount+1), 450, 40);
         g.drawString("JetPack:" + String.valueOf(bob.getJetPackCount()), 450, 80);
 
@@ -166,25 +199,25 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 
         else if(heightCount >= 10) {
             barriers.clear();
-            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+100,randy.nextInt(80)+20,20));
-            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+200,randy.nextInt(80)+20,20));
-            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+300,randy.nextInt(80)+20, 20));
+            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+100,randy.nextInt(80)+20,35));
+            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+200,randy.nextInt(80)+20,35));
+            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+300,randy.nextInt(80)+20, 35));
 
         }
 
         else if(heightCount >= 5) {
             barriers.clear();
-            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+100,100,20));
-            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+200,100,20));
-            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+300, 100, 20));
+            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+100,100,35));
+            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+200,100,35));
+            barriers.add(new Barrier(randy.nextInt(500),randy.nextInt(100)+300, 100, 35));
 
         }
         else {
 
             barriers.clear();
-            barriers.add(new Barrier(randy.nextInt(500), 100, 100, 20));
-            barriers.add(new Barrier(randy.nextInt(500), 200, 100, 20));
-            barriers.add(new Barrier(randy.nextInt(500), 300, 100, 20));
+            barriers.add(new Barrier(randy.nextInt(500), 100, 100, 35));
+            barriers.add(new Barrier(randy.nextInt(500), 200, 100, 35));
+            barriers.add(new Barrier(randy.nextInt(500), 300, 100, 35));
         }
     }
 
